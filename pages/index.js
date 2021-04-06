@@ -38,7 +38,7 @@ export default function Home() {
         .then((res) => res.data);
 
       await axios
-        .post("http://localhost:3000/api/request", {
+        .post("http://localhost:3000/api/requests", {
           ...form,
           imageURL: url,
         })
