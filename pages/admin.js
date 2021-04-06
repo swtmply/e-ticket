@@ -1,5 +1,6 @@
 import axios from "axios";
 import emailjs from "emailjs-com";
+import Link from "next/link";
 
 export default function Admin({ requests }) {
   const requestHandler = async (e, request) => {
@@ -32,29 +33,102 @@ export default function Admin({ requests }) {
             console.log("FAILED...", error);
           }
         );
+      location.reload;
     }
-    // TODO: hot reload per update
   };
 
   return (
-    // TODO: Table
     // pwede niyo bawasan yung data na ilalabas sa table kung trip niyo
-    <div>
-      {requests.map((r, i) => (
-        <div key={i}>
-          <p>Name: {r.name}</p>
-          <p>Company ID: {r.companyId}</p>
-          <p>Department: {r.department}</p>
-          <p>Description: {r.description}</p>
-          <p>Photo: </p>
-          <img src={r.imageURL} alt="complaint picture" />
-          <input
-            type="checkbox"
-            checked={r.completed}
-            onChange={(e) => requestHandler(e.target.checked, r)}
-          />
-        </div>
-      ))}
+    <div className="self-center w-8/12 bg-gray-100 p-5 rounded">
+      <div>
+        <h2 className="font-bold text-3xl mb-3">Requests Table</h2>
+        <table className="table-auto shadow-md w-full">
+          <thead className="w-full border-2 border-indigo-200 ">
+            <tr>
+              <td className="font-bold text-xl p-2">Name</td>
+              <td className="font-bold text-xl p-2">Department</td>
+              <td className="font-bold text-xl p-2">Company ID</td>
+              <td className="font-bold text-xl p-2">Ticket ID</td>
+              <td className="font-bold text-xl p-2">Image</td>
+              <td className="font-bold text-xl p-2">Completed</td>
+            </tr>
+          </thead>
+          <tbody>
+            {requests.map((r, i) => {
+              if (!r.completed)
+                return (
+                  <tr
+                    className="even:bg-gray-300 border-l-2 border-r-2 border-indigo-200"
+                    key={i}
+                  >
+                    <td className="p-2">{r.name}</td>
+                    <td className="p-2">{r.department}</td>
+                    <td className="p-2">{r.companyId}</td>
+                    <td className="p-2">{r._id}</td>
+                    <td className="p-2 text-indigo-300">
+                      <a target="_blank" href={r.imageURL}>
+                        Click here
+                      </a>
+                    </td>
+                    <td className="p-2 flex justify-center">
+                      <input
+                        type="checkbox"
+                        checked={r.completed}
+                        className="p-2 checked:border-indigo-500"
+                        onChange={(e) => requestHandler(e.target.checked, r)}
+                      />
+                    </td>
+                  </tr>
+                );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="mt-10">
+        <h2 className="font-bold text-3xl mb-3">Completed Requests</h2>
+        <table className="table-auto shadow-md w-full">
+          <thead className="w-full border-2 border-indigo-200 ">
+            <tr>
+              <td className="font-bold text-xl p-2">Name</td>
+              <td className="font-bold text-xl p-2">Department</td>
+              <td className="font-bold text-xl p-2">Company ID</td>
+              <td className="font-bold text-xl p-2">Ticket ID</td>
+              <td className="font-bold text-xl p-2">Image</td>
+              <td className="font-bold text-xl p-2">Completed</td>
+            </tr>
+          </thead>
+          <tbody>
+            {requests.map((r, i) => {
+              if (r.completed)
+                return (
+                  <tr
+                    className="even:bg-gray-300 border-l-2 border-r-2 border-indigo-200"
+                    key={i}
+                  >
+                    <td className="p-2">{r.name}</td>
+                    <td className="p-2">{r.department}</td>
+                    <td className="p-2">{r.companyId}</td>
+                    <td className="p-2">{r._id}</td>
+                    <td className="p-2 text-indigo-300">
+                      <a target="_blank" href={r.imageURL}>
+                        Click here
+                      </a>
+                    </td>
+                    <td className="p-2 flex justify-center">
+                      <input
+                        type="checkbox"
+                        checked={r.completed}
+                        className="p-2 checked:border-indigo-500"
+                        onChange={(e) => requestHandler(e.target.checked, r)}
+                      />
+                    </td>
+                  </tr>
+                );
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

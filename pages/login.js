@@ -1,11 +1,13 @@
 import { useState } from "react";
 import axios from "axios";
+import Router from "next/router";
 
 export default function Login() {
   const [form, setForm] = useState({
     username: "",
     password: "",
   });
+  const [message, setMessage] = useState("");
 
   const inputHandler = (e) => {
     setForm({
@@ -17,31 +19,62 @@ export default function Login() {
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    await axios.post("/api/login", { token: "admin" });
+    if (form.password === "admin" && form.username === "admin") {
+      await axios.post("/api/login", { token: "admin" });
+      Router.push("/admin");
+    } else {
+      setMessage("Invalid Credentials");
+    }
   };
 
-  // click niyo lang yung login tapos punta kayo localhost:3000/admin
   return (
-  
-    <div class="bg-white py-32 px-10 min-h-screen">
-    <div class="flex flex-1 justify-center">
-    <div class="bg-purple-300 rounded-lg sm:border-6 border-black px-4 lg:px-24 py-20 lg:max-w-xl sm:max-w-md w-full text-center">
-      <h1 class="text-5xl font-normal leading-normal mt-0 mb-10 text-pink-800 text-center">Login</h1>
-      <form onSubmit={submitHandler}>
-        <div class="relative w-full mb-3">
-          <label class="block uppercase text-purple-900 text-xl font-bold text-left mb-2">Username:</label>
-          <input class="border-0 px-3 py-3 text-purple-900 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full" onChange={inputHandler} />
+    <div className="flex self-center justify-center min-w-full">
+      <form
+        className="mt-3 w-4/12 shadow-lg p-10 flex flex-col bg-gray-200 bg-opacity-60 rounded-md"
+        onSubmit={submitHandler}
+      >
+        <h1 className="font-bold text-3xl">Login</h1>
+        {message ? (
+          <div className="flex justify-between p-2 mt-3 min-w-full bg-red-300 border-2 border-red-400 rounded">
+            <p className="text-white">{message}</p>
+            <button
+              className="text-white outline-none"
+              type="button"
+              onClick={() => setMessage("")}
+            >
+              X
+            </button>
+          </div>
+        ) : null}
+        <div className="flex flex-col mt-3">
+          <label>Username:</label>
+          <input
+            type="text"
+            name="username"
+            className="mt-1 mb-2 p-2 outline-none border-2 rounded border-gray-400 focus:border-indigo-500"
+            placeholder="Your username"
+            onChange={inputHandler}
+          />
         </div>
-        <div class="relative w-full mb-3">
-          <label class="block uppercase text-purple-900 text-xl font-bold text-left mb-2">Password:</label>
-          <input class="border-0 px-3 py-3  text-purple-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full" onChange={inputHandler} />
+        <div className="flex flex-col mt-3">
+          <label>Password:</label>
+          <input
+            type="password"
+            name="password"
+            className="mt-1 mb-2 p-2 outline-none border-2 rounded border-gray-400 focus:border-indigo-500"
+            placeholder="Your password"
+            onChange={inputHandler}
+          />
         </div>
         <div>
-          <button type="submit"class="mt-8 block w-full rounded bg-purple-500 py-2 hover:bg-pink-300 focus:shadow-outline focus:outline-none text-white font-bold shadow"><p class="tracking-wider leading-10">Login</p></button>
+          <button
+            className="bg-purple-400 w-full p-1 mt-3 text-white font-bold hover:bg-purple-500"
+            type="submit"
+          >
+            <p className="tracking-wider leading-10">Login</p>
+          </button>
         </div>
       </form>
-    </div>
-    </div>
     </div>
   );
 }

@@ -11,7 +11,7 @@ export default function Home() {
   });
   const [image, setImage] = useState();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [response, setResponse] = useState("request notif");
+  const [response, setResponse] = useState("");
 
   const inputHandler = (e) => {
     setForm({
@@ -55,72 +55,110 @@ export default function Home() {
   // punta kayo sa localhost:3000/login pagtapos nito
 
   return (
-    <div class="bg-gradient-to-r from-pink-300 to-yellow-200 py-32 px-10 min-h-screen">
-      <h3 class="text-5xl font-normal leading-normal mt-0 mb-2 text-pink-800 text-center">
-          Request Form
-      </h3>
+    <div className="flex self-center justify-center min-w-full">
+      <form
+        className="mt-3 w-8/12 shadow-lg p-10 flex justify-between bg-gray-200 bg-opacity-60 rounded-md"
+        onSubmit={submitHandler}
+      >
+        <div className="flex flex-col w-5/12">
+          <h3 className="text-3xl font-bold">Request Form</h3>
 
-      {response ? (
-        <div className="flex">
-          <p>{response}</p>
-          <button
-            className="ml-3"
-            type="button"
-            onClick={() => setResponse("")}
-          >
-            X
-          </button>
-        </div>
-      ) : null}
-
-      <form class="md:w-1/2 mx-auto" onSubmit={submitHandler}>
-        <div class="shadow-xl">
-          <div class="flex items-center bg-purple-400 rounded-t-lg border-b border-purple-500">
-          <label for="name" class="w-16 text-right font-semibold mr-16">Name:</label>
-          <input type="text" id="name" name="name" class="flex-1 p-4 pl-0 bg-transparent outline-none text-white ml-16" onChange={inputHandler} />
-        </div>
-        <div class="flex items-center bg-purple-400 rounded-none border-b border-purple-500">
-          <label for="name" class="w-16 text-right font-semibold mr-16">Email:</label>
-          <input type="text" id="email" name="email" class="flex-1 p-4 pl-0 bg-transparent outline-none text-white ml-16" onChange={inputHandler} />
-        </div>
-        <div class="flex items-center bg-purple-400 rounded-none border-b border-purple-500">
-          <label for="department" class="w-16 text-right font-semibold ml-4 mr-16">Department:</label>
-          <select class="form-select mt-1 block w-full h-12  bg-purple-400 rounded-none border-purple-500 ml-12 text-white"onChange={inputHandler}>
-            <option value="">---Select Department---</option>
-            <option value="Marketing">Marketing</option>
-            <option value="Advertising">Advertising</option>
-            <option value="IT">IT</option>
-          </select>
-        </div>
-        <div class="flex items-center bg-purple-400 rounded-none border-b border-purple-500">
-          <label for="company" class="w-16 text-right font-semibold ml-4 mr-16">Company ID:</label>
-          <input type="text" id="company" name="company" class="flex-1 p-4 pl-0 bg-transparent outline-none text-white ml-12" onChange={inputHandler} />
-        </div>
-        <div class="flex items-center bg-purple-400 rounded-b-lg mb-10">
-          <label for="name" class="w-20 text-right font-semibold mr-16">Image:</label>
-          <input type="file" class="flex-1 p-4 pl-0 bg-blue ml-12"
-            name="imageURL"
-            accept=".jpg, .png, .jpeg"
-            onChange={(e) => setImage(e.target.files[0])}
-          />
-        </div>
-        <div class="flex items-center bg-purple-400 rounded-none border-b-lg border-purple-500">
-              <label for="description" class="w-24 text-right font-semibold">
-                        Description
-              </label>
-              <textarea class="ml-20 resize-none border rounded-md w-full bg-purple-400 text-white border-purple-500" 
-                 name="description"
-                 cols="30"
-                 rows="9"
-                 onChange={inputHandler}>
-              </textarea>
+          {response ? (
+            <div
+              className={
+                response === "Request Sent! :>"
+                  ? "flex justify-between p-2 mt-3 min-w-full bg-green-400 border-2 border-green-500 rounded bg-opacity-70"
+                  : "flex justify-between p-2 mt-3 min-w-full bg-red-300 border-2 border-red-400 rounded"
+              }
+            >
+              <p className="text-white">{response}</p>
+              <button
+                className="text-white outline-none"
+                type="button"
+                onClick={() => setResponse("")}
+              >
+                X
+              </button>
+            </div>
+          ) : null}
+          <div className="flex flex-col mt-3">
+            <label>Name:</label>
+            <input
+              className="mt-1 mb-2 p-2 outline-none border-2 rounded border-gray-400 focus:border-indigo-500"
+              type="text"
+              placeholder="Your name"
+              name="name"
+              onChange={inputHandler}
+            />
           </div>
-        <div>
-          <button class="block w-full rounded bg-purple-500 py-3 hover:bg-pink-300 focus:shadow-outline focus:outline-none text-white font-bold shadow" type="button" disabled={isSubmitting} type="submit">
-            Submit Request
-          </button>
+          <div className="flex flex-col">
+            <label>Email:</label>
+            <input
+              className="mt-1 mb-2 p-2 outline-none border-2 rounded border-gray-400 focus:border-indigo-500"
+              type="text"
+              id="email"
+              name="email"
+              placeholder="Your email"
+              onChange={inputHandler}
+            />
+          </div>
+          <div className="flex flex-col">
+            <label for="department">Department:</label>
+            <select
+              className="mt-1 mb-2 p-2 outline-none border-2 rounded border-gray-400 focus:border-indigo-500"
+              onChange={inputHandler}
+            >
+              <option value="">---Select Department---</option>
+              <option value="Marketing">Marketing</option>
+              <option value="Advertising">Advertising</option>
+              <option value="IT">IT</option>
+            </select>
+          </div>
+          <div className="flex flex-col">
+            <label>Company ID:</label>
+            <input
+              type="text"
+              className="mt-1 mb-2 p-2 outline-none border-2 rounded border-gray-400 focus:border-indigo-500"
+              id="company"
+              name="company"
+              placeholder="Your Company ID (ex. IT123)"
+              onChange={inputHandler}
+            />
+          </div>
         </div>
-      </div>
+
+        <div className="flex flex-col w-6/12">
+          <div className="mb-2">
+            <label className="mr-2">Image:</label>
+            <input
+              type="file"
+              name="imageURL"
+              accept=".jpg, .png, .jpeg"
+              onChange={(e) => setImage(e.target.files[0])}
+            />
+          </div>
+          <div className="flex flex-col mb-2">
+            <label>Description:</label>
+            <textarea
+              className="mt-1 mb-2 p-2 outline-none border-2 rounded border-gray-400 focus:border-indigo-500"
+              name="description"
+              cols="30"
+              rows="9"
+              placeholder="Your request or complain"
+              onChange={inputHandler}
+            ></textarea>
+          </div>
+          <div className="min-w-full">
+            <button
+              className="bg-purple-400 w-full p-2 text-white font-bold hover:bg-purple-500 disabled:opacity-50 disabled:cursor-default"
+              type="button"
+              disabled={!isSubmitting}
+              type="submit"
+            >
+              Submit Request
+            </button>
+          </div>
+        </div>
       </form>
     </div>
   );
