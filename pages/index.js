@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import emailjs from "emailjs-com";
 
 export default function Home() {
   const [form, setForm] = useState({
@@ -43,7 +44,29 @@ export default function Home() {
           imageURL: url,
         })
         .then((res) => {
-          if (res) setResponse("Request Sent! :>");
+          emailjs
+            .send(
+              "service_eomwvjp",
+              "template_4rvzouk",
+              {
+                name: res.data.name,
+                description: res.data.description,
+                id: res.data._id,
+                email: res.data.email,
+              },
+              "user_r9SnkP1SzCSCO8yifxzz4"
+            )
+            .then(
+              function (response) {
+                if (response)
+                  setResponse("Request Sent! Please check your email.");
+
+                setForm({});
+              },
+              function (error) {
+                console.log("FAILED...", error);
+              }
+            );
         });
 
       setIsSubmitting(false);
@@ -66,7 +89,7 @@ export default function Home() {
           {response ? (
             <div
               className={
-                response === "Request Sent! :>"
+                response === "Request Sent! Please check your email."
                   ? "flex justify-between p-2 mt-3 min-w-full bg-green-400 border-2 border-green-500 rounded bg-opacity-70"
                   : "flex justify-between p-2 mt-3 min-w-full bg-red-300 border-2 border-red-400 rounded"
               }
@@ -103,10 +126,11 @@ export default function Home() {
             />
           </div>
           <div className="flex flex-col">
-            <label for="department">Department:</label>
+            <label>Department:</label>
             <select
               className="mt-1 mb-2 p-2 outline-none border-2 rounded border-gray-400 focus:border-indigo-500"
               onChange={inputHandler}
+              name="department"
             >
               <option value="">---Select Department---</option>
               <option value="Marketing">Marketing</option>
@@ -119,8 +143,7 @@ export default function Home() {
             <input
               type="text"
               className="mt-1 mb-2 p-2 outline-none border-2 rounded border-gray-400 focus:border-indigo-500"
-              id="company"
-              name="company"
+              name="companyId"
               placeholder="Your Company ID (ex. IT123)"
               onChange={inputHandler}
             />
@@ -152,10 +175,10 @@ export default function Home() {
             <button
               className="bg-purple-400 w-full p-2 text-white font-bold hover:bg-purple-500 disabled:opacity-50 disabled:cursor-default"
               type="button"
-              disabled={!isSubmitting}
+              disabled={isSubmitting}
               type="submit"
             >
-              Submit Request
+              {isSubmitting ? "Submitting..." : "Submit Request"}
             </button>
           </div>
         </div>

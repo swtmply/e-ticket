@@ -42,10 +42,10 @@ export default function Admin({ requests }) {
     <div className="self-center w-8/12 bg-gray-200 bg-opacity-60 p-5 rounded">
       <div>
         <h2 className="font-bold text-3xl mb-3">
-          Requests Table
-          <Link href="/completed">
+          Completed Requests{" "}
+          <Link href="/admin">
             <span className="text-indigo-500 font-normal text-sm mx-2 cursor-pointer">
-              See Completed Requests
+              See Pending Requests
             </span>
           </Link>
         </h2>
@@ -62,7 +62,7 @@ export default function Admin({ requests }) {
           </thead>
           <tbody>
             {requests.map((r, i) => {
-              if (!r.completed)
+              if (r.completed)
                 return (
                   <tr
                     className="even:bg-gray-300 border-l-2 border-r-2 border-indigo-200"
